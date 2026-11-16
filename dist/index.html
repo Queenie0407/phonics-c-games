@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#241044">
+  <meta name="description" content="A bilingual phonics whack-a-mole game for learning soft c and hard c.">
+  <title>Castle C: The Sound Crystal Quest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="home-screen" class="screen home-screen active" aria-labelledby="home-title">
+      <div class="home-card glass-panel">
+        <div class="eyebrow">PHONICS CASTLE ADVENTURE</div>
+        <h1 id="home-title"><span>Castle C</span><small>The Sound Crystal Quest</small></h1>
+        <p class="bilingual-copy">
+          <strong>Restore the two sound crystals and save the castle!</strong>
+          <span>找回兩顆聲音水晶，拯救 C 城堡！</span>
+        </p>
+        <div class="crystal-row" aria-label="Soft C and Hard C crystals">
+          <div class="crystal-card soft"><i class="crystal"></i><b>SOFT C /s/</b><span>柔音 c</span></div>
+          <div class="crystal-card hard"><i class="crystal"></i><b>HARD C /k/</b><span>硬音 c</span></div>
+        </div>
+        <button id="start-btn" class="primary-btn bilingual-btn">
+          <span>Start Adventure</span><small>開始冒險</small>
+        </button>
+        <button id="how-btn" class="text-btn">How to Play｜玩法說明</button>
+      </div>
+      <img class="home-owl" src="assets/owl-guide.png" alt="Professor Hoot, the castle phonics guide">
+    </section>
+
+    <section id="map-screen" class="screen map-screen" aria-labelledby="map-title">
+      <header class="map-header glass-panel">
+        <div><div class="eyebrow">THE CRYSTAL TRAIL</div><h2 id="map-title">Castle Map <small>城堡地圖</small></h2></div>
+        <div class="header-actions">
+          <button class="round-btn" data-action="home" aria-label="Home">⌂</button>
+          <button class="round-btn bgm-toggle" aria-label="Toggle background music">♫</button>
+          <button class="round-btn sfx-toggle" aria-label="Toggle sound effects">🔊</button>
+        </div>
+      </header>
+      <div class="map-path" role="list">
+        <button class="level-card unlocked" data-level="0">
+          <span class="level-number">1</span><b>The Castle Gate</b><small>城堡大門</small><em>SOFT C /s/ · 3×3</em>
+        </button>
+        <span class="path-dots">◆ ◆ ◆</span>
+        <button class="level-card" data-level="1">
+          <span class="level-number">2</span><b>The Royal Towers</b><small>皇家高塔</small><em>HARD C /k/ · 4×4</em><i class="lock">🔒</i>
+        </button>
+        <span class="path-dots">◆ ◆ ◆</span>
+        <button class="level-card" data-level="2">
+          <span class="level-number">3</span><b>The Crystal Dungeon</b><small>水晶地城</small><em>MIXED · 5×5</em><i class="lock">🔒</i>
+        </button>
+      </div>
+      <div class="map-tip glass-panel"><img src="assets/owl-guide.png" alt=""><p><b>Choose a tower to begin.</b><span>選擇已解鎖的關卡開始挑戰。</span></p></div>
+    </section>
+
+    <section id="game-screen" class="screen game-screen" aria-labelledby="mission-title">
+      <header class="game-hud glass-panel">
+        <button class="round-btn" data-action="map" aria-label="Back to map">←</button>
+        <div class="hud-stat hearts" id="hearts" aria-label="Lives">♥ ♥ ♥ ♥ ♥</div>
+        <div class="hud-stat timer">⏱ <span id="time-value">45</span></div>
+        <div class="hud-stat score">★ <span id="score-value">0</span>/<span id="goal-value">8</span></div>
+        <button id="pause-btn" class="round-btn" aria-label="Pause">Ⅱ</button>
+        <button class="round-btn bgm-toggle" aria-label="Toggle background music">♫</button>
+        <button class="round-btn sfx-toggle" aria-label="Toggle sound effects">🔊</button>
+      </header>
+      <div class="mission-banner glass-panel">
+        <div><span id="stage-label">STAGE 1 · 3×3</span><h2 id="mission-title">Find <b id="target-label">SOFT C /s/</b></h2><p id="mission-zh">找出發 /s/ 的 soft c 單字</p></div>
+        <button id="target-sound-btn" class="listen-btn"><span>🔊</span><b>Hear the target</b><small>聆聽目標音</small></button>
+      </div>
+      <div id="hole-grid" class="hole-grid grid-3" aria-live="polite"></div>
+      <div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
+      <div id="hammer" class="hammer" aria-hidden="true">🔨</div>
+    </section>
+
+    <section id="result-screen" class="screen result-screen" aria-labelledby="result-title">
+      <div class="result-card glass-panel">
+        <div id="result-stars" class="result-stars">★ ★ ★</div>
+        <h2 id="result-title">Crystal Restored!</h2>
+        <p id="result-subtitle">聲音水晶恢復力量了！</p>
+        <div class="result-mascot-wrap"><img id="result-mascot" src="assets/mole-correct.png" alt="Celebrating mole knight"></div>
+        <div class="result-stats">
+          <div><b id="result-score">8/8</b><span>Correct｜答對</span></div>
+          <div><b id="result-accuracy">100%</b><span>Accuracy｜正確率</span></div>
+          <div><b id="result-listens">0</b><span>Listens｜聆聽</span></div>
+        </div>
+        <div class="result-actions">
+          <button id="retry-btn" class="secondary-btn bilingual-btn"><span>Play Again</span><small>再玩一次</small></button>
+          <button id="continue-btn" class="primary-btn bilingual-btn"><span>Continue</span><small>繼續冒險</small></button>
+        </div>
+      </div>
+    </section>
+
+    <div id="tutorial" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="modal-card glass-panel">
+        <button class="modal-close" aria-label="Close">×</button>
+        <img src="assets/owl-guide.png" alt="Professor Hoot">
+        <div>
+          <div class="eyebrow">PROFESSOR HOOT SAYS</div>
+          <h2 id="tutorial-title">The Two Sounds of C <small>C 的兩種聲音</small></h2>
+          <div class="rule-grid">
+            <article class="soft-rule"><b>SOFT C /s/</b><p>C usually sounds like /s/ before <strong>e, i, or y</strong>.</p><span>c 在 e、i、y 前面通常發 /s/。</span><em>cent · city · cycle</em></article>
+            <article class="hard-rule"><b>HARD C /k/</b><p>C usually sounds like /k/ before <strong>a, o, u, or a consonant</strong>.</p><span>c 在 a、o、u 或子音前通常發 /k/。</span><em>cat · cold · cup · class</em></article>
+          </div>
+          <ol>
+            <li><b>Read or listen to the word.</b><span>閱讀單字，或按喇叭聽發音。</span></li>
+            <li><b>Whack only the target sound.</b><span>只敲打符合目標音的地鼠。</span></li>
+            <li><b>Wrong answers cost one heart.</b><span>答錯會失去一顆愛心。</span></li>
+          </ol>
+          <button id="tutorial-go" class="primary-btn bilingual-btn"><span>Got it!</span><small>我知道了！</small></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="pause-card glass-panel"><h2>Game Paused <small>遊戲暫停</small></h2><button id="resume-btn" class="primary-btn bilingual-btn"><span>Resume</span><small>繼續遊戲</small></button></div>
+    </div>
+  </main>
+
+  <audio id="bgm" src="sound/background-music.mp3" loop preload="auto"></audio>
+  <audio id="sfx-swing" src="sound/hammer-swing.mp3" preload="auto"></audio>
+  <audio id="sfx-hit" src="sound/hammer-hit.mp3" preload="auto"></audio>
+  <audio id="sfx-score" src="sound/score-chime.mp3" preload="auto"></audio>
+  <audio id="sfx-hurt" src="sound/mole-hurt.mp3" preload="auto"></audio>
+  <audio id="sfx-cheer" src="sound/level-cheer.mp3" preload="auto"></audio>
+  <script src="app.js"></script>
+</body>
+</html>
