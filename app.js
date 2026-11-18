@@ -19,7 +19,16 @@ function showScreen(id){screens.forEach(s=>s.classList.toggle('active',s.id===id
 function playSfx(name,delay=0){if(!sfxOn)return;setTimeout(()=>{const a=sounds[name];a.currentTime=0;a.play().catch(()=>{});},delay)}
 function speak(text,rate=.86){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=rate;u.pitch=1.05;speechSynthesis.speak(u)}
 function startBgm(){if(bgmOn){bgm.play().catch(()=>{})}}
-function syncAudioButtons(){ $$('.bgm-toggle').forEach(b=>{b.classList.toggle('off',!bgmOn);b.textContent=bgmOn?'♫':'♩'});$$('.sfx-toggle').forEach(b=>{b.classList.toggle('off',!sfxOn);b.textContent=sfxOn?'🔊':'🔇'})}
+function syncAudioButtons(){
+ $$('.bgm-toggle').forEach(b=>{
+  b.classList.toggle('off',!bgmOn);
+  b.setAttribute('aria-pressed',String(!bgmOn));
+  b.setAttribute('aria-label',bgmOn?'Turn off background music｜關閉背景音樂':'Turn on background music｜開啟背景音樂');
+  if(b.classList.contains('floating-bgm'))b.innerHTML=`<span aria-hidden="true">${bgmOn?'♫':'♩'}</span><b>${bgmOn?'Music':'Music off'}</b><small>${bgmOn?'背景音樂':'音樂已關閉'}</small>`;
+  else b.textContent=bgmOn?'♫':'♩';
+ });
+ $$('.sfx-toggle').forEach(b=>{b.classList.toggle('off',!sfxOn);b.textContent=sfxOn?'🔊':'🔇'});
+}
 function openTutorial(){tutorial.classList.add('open');tutorial.setAttribute('aria-hidden','false')}
 function closeTutorial(){tutorial.classList.remove('open');tutorial.setAttribute('aria-hidden','true')}
 function renderMap(){
