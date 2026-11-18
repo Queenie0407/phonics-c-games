@@ -12,7 +12,7 @@ const screens=$$('.screen'),tutorial=$('#tutorial'),pauseModal=$('#pause-modal')
 const bgm=$('#bgm'); bgm.volume=.22;
 const sounds={swing:$('#sfx-swing'),hit:$('#sfx-hit'),score:$('#sfx-score'),hurt:$('#sfx-hurt'),cheer:$('#sfx-cheer')};
 Object.values(sounds).forEach(a=>a.volume=.72);
-let bgmOn=true,sfxOn=true,currentLevel=0,score=0,lives=5,timeLeft=0,total=0,listens=0,timerId=null,spawnId=null,activeHole=null,paused=false,running=false,currentTarget='soft';
+let bgmOn=true,sfxOn=true,currentLevel=0,score=0,lives=5,timeLeft=0,total=0,listens=0,timerId=null,spawnId=null,hammerTimer=null,activeHole=null,paused=false,running=false,currentTarget='soft';
 let unlocked=Math.max(0,Math.min(2,Number(localStorage.getItem('castleCUnlocked')||0)));
 
 function showScreen(id){screens.forEach(s=>s.classList.toggle('active',s.id===id));}
@@ -66,7 +66,7 @@ function spawnMole(){
 }
 function highlightC(word){const i=word.toLowerCase().indexOf('c');return i<0?word:`${word.slice(0,i)}<span class="c-letter">${word[i]}</span>${word.slice(i+1)}`}
 function hideMole(hole){hole.classList.remove('active','correct','wrong');hole.dataset.answered='true';delete hole.dataset.word;delete hole.dataset.type;hole.setAttribute('aria-label','Empty castle hole');hole.querySelector('.word-card').textContent='';const listen=hole.querySelector('.word-audio');listen.disabled=true;listen.tabIndex=-1;if(activeHole===hole)activeHole=null}
-function hammerAt(e){const h=$('#hammer');h.style.left=`${e.clientX}px`;h.style.top=`${e.clientY}px`;h.classList.remove('swing');void h.offsetWidth;h.classList.add('swing')}
+function hammerAt(e){const h=$('#hammer');h.style.left=`${e.clientX}px`;h.style.top=`${e.clientY}px`;clearTimeout(hammerTimer);h.classList.remove('swing');void h.offsetWidth;h.classList.add('swing');hammerTimer=setTimeout(()=>h.classList.remove('swing'),300)}
 function feedback(good,word,type){const f=$('#feedback');f.className=`feedback show ${good?'good':'bad'}`;f.innerHTML=good?`✓ Correct! <b>${word}</b><br><small>答對了！</small>`:`✕ Not this time — <b>${word}</b> is ${type==='soft'?'soft c /s/':'hard c /k/'}<br><small>再看一次 c 後面的字母。</small>`;setTimeout(()=>f.classList.remove('show'),900)}
 function whack(hole,e){
  if(!running||paused||!hole.classList.contains('active')||hole.dataset.answered==='true')return;hole.dataset.answered='true';hammerAt(e);playSfx('swing');const good=hole.dataset.type===currentTarget;total++;
